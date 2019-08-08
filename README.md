@@ -1,6 +1,8 @@
 # softbody-dynamics
-Forward Euler spring-mass-damper softbody simulation.
-Conserves local rigid body momentum (linear and angular).
+Forward Euler spring-mass-damper softbody simulation.\
+Conserves local rigid body momentum (linear and angular).\
+\
+Uses an approximation of hermite radial basis function interpolation\
+to find the interior of the softbodies for collision.\
 
-Uses an approximation of hermite radial basis function interpolation
-to find the interior of the softbodies for collision.
+## Try it [here](https://gregtj.github.io/softbody-dynamics/)!
