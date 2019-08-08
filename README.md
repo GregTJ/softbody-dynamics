@@ -1,2 +1,6 @@
 # softbody-dynamics
-2D softbody dynamics simulation with p5.js
+Forward Euler spring-mass-damper softbody simulation.
+Conserves local rigid body momentum (linear and angular).
+
+Uses an approximation of hermite radial basis function interpolation
+to find the interior of the softbodies for collision.
