@@ -42,7 +42,7 @@ function setup() {
     col = lerpColor(col, color('white'), 0.6);
     
     // Initialize the softbodies with random rotations.
-    let rot = random(2 * PI);
+    let rot = random(TWO_PI);
     let body = create_square(damp, mass, stiff, resolution, size, pos, rot, col);
     softbodies[i] = body;
   }
