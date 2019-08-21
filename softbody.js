@@ -15,21 +15,21 @@ function setup() {
   createCanvas(720, 480);
 
   // The simulation parameters.
-  var gravity = createVector(0, 1); // Gravity acceleration vector.
-  var boundary_friction = 0.6; // Damping of momentum on collision with boundary.
-  var collison_damping = 0.7; // Damping of momentum on collision with object.
-  var collision_force = 400; // Magnitude of force repeling softbody nodes on collision.
-  var mouse_pull = 0.005; // Strength of mouse force.
-  var damp = 0.3; // Softbody node damping.
-  var stiff = 0.06; // Softbody spring stiffness.
-  var mass = 1; // Softbody node mass.
+  const gravity = createVector(0, 1); // Gravity acceleration vector.
+  const boundary_friction = 0.6; // Damping of momentum on collision with boundary.
+  const collison_damping = 0.7; // Damping of momentum on collision with object.
+  const collision_force = 400; // Magnitude of force repeling softbody nodes on collision.
+  const mouse_pull = 0.005; // Strength of mouse force.
+  const damp = 0.3; // Softbody node damping.
+  const stiff = 0.06; // Softbody spring stiffness.
+  const mass = 1; // Softbody node mass.
 
-  var count = 4; // Number of softbodies.
-  var size = 100; // Size of softbodies.
-  var resolution = 4; // Number of nodes per softbody.
+  const count = 4; // Number of softbodies.
+  const size = 100; // Size of softbodies.
+  const resolution = 4; // Number of nodes per softbody.
 
   resolution = 4 * (resolution + 1)
-  var softbodies = new Array(count);
+  let softbodies = new Array(count);
   for (let i = 0; i < count; i++) {
     // Evenly space the softbodies.
     let p = i / (count - 1);
@@ -48,7 +48,7 @@ function setup() {
   }
 
   // Define the scene forces as functions which are applied to each softbody.
-  var mouse_force = function(softbody, index) {
+  const mouse_force = function(softbody, index) {
     // May use index to make force only apply to a subset of scene objects.
     if (mouseIsPressed) {
       let force_vector = createVector(mouseX, mouseY).sub(softbody.position);
@@ -57,11 +57,11 @@ function setup() {
     }
   }
 
-  var gravity_force = function(softbody) {
+  const gravity_force = function(softbody) {
     softbody.external_force.add(gravity);
   }
 
-  var forces = [mouse_force, gravity_force];
+  const forces = [mouse_force, gravity_force];
   // Create the scene.
   example = new scene(softbodies, boundary_friction,
     collison_damping, collision_force, forces)
@@ -82,7 +82,7 @@ function create_square(damping, mass, stiffness, node_count,
   size, position, rotation, color) {
 
   // Create empty array for the nodes.
-  var nodes = new Array(node_count);
+  let nodes = new Array(node_count);
   for (let i = 0; i < nodes.length; i++) {
     let springs = [];
     for (let j = 0; j < nodes.length; j++) {
@@ -217,10 +217,10 @@ function softbody(nodes, color) {
     for (let i = 0; i < l; i++) {
       /* Calculate normals between adjacent points and
       average them to find the normal at each node. */
-      prev = this.nodes[(i - 1) - l * floor((i - 1) / l)].position;
-      curr = this.nodes[i].position;
-      next = this.nodes[(i + 1) % l].position;
-      normal = p5.Vector.sub(prev, curr).rotate(HALF_PI).normalize();
+      let prev = this.nodes[(i - 1) - l * floor((i - 1) / l)].position;
+      let curr = this.nodes[i].position;
+      let next = this.nodes[(i + 1) % l].position;
+      let normal = p5.Vector.sub(prev, curr).rotate(HALF_PI).normalize();
       normal.add(p5.Vector.sub(curr, next).rotate(HALF_PI).normalize())
       this.normals[i] = normal.normalize();
 
@@ -273,9 +273,9 @@ function softbody(nodes, color) {
     // Draw a filled curve around the shape.
     beginShape();
     for (let i = 0; i < this.nodes.length; i++) {
-      index = (i + 1) % this.nodes.length
-      position = this.nodes[index].position
-      curveVertex(position.x, position.y);
+      let index = (i + 1) % this.nodes.length
+      let position = this.nodes[index].position
+      let curveVertex(position.x, position.y);
     }
     endShape(CLOSE);
 
@@ -284,9 +284,9 @@ function softbody(nodes, color) {
       stroke(0);
       strokeWeight(1);
       for (let i = 0; i < this.nodes.length; i++) {
-        position = this.nodes[i].position;
-        radius = this.radii[i];
-        normal = p5.Vector.mult(this.normals[i], radius / 2);
+        let position = this.nodes[i].position;
+        let radius = this.radii[i];
+        let normal = p5.Vector.mult(this.normals[i], radius / 2);
         normal.add(position);
         noFill();
         line(position.x, position.y, normal.x, normal.y);
@@ -330,8 +330,8 @@ function node(position, mass, damping, springs) {
   this.integrate_springs = function(nodes) {
     // For every spring of this node;
     for (let i = 0; i < this.springs.length; i++) {
-      goal_spring = this.springs[i];
-      goal_node = nodes[goal_spring.index];
+      let goal_spring = this.springs[i];
+      let goal_node = nodes[goal_spring.index];
 
       /* Calculate goal position between the two masses
          by finding the unit normal vector between the masses,
@@ -345,14 +345,14 @@ function node(position, mass, damping, springs) {
          If you alter this code slightly, 
          changing the falloff law to the inverse square law,
          this becomes a newtonian gravity sim. */
-      goal_position = p5.Vector.sub(this.position, goal_node.position);
+      let goal_position = p5.Vector.sub(this.position, goal_node.position);
       goal_position.normalize();
       goal_position.mult(goal_spring.length);
       goal_position.add(goal_node.position);
 
       /* Find acceleration vector (goal_vector) by subtracting
          the current node's position from the goal position. */
-      goal_vector = p5.Vector.sub(goal_position, this.position);
+      let goal_vector = p5.Vector.sub(goal_position, this.position);
 
       // Scale the acceleration vector by the stiffness coefficient.
       goal_vector.mult(goal_spring.stiffness);
@@ -369,11 +369,11 @@ function node(position, mass, damping, springs) {
     softbody_position, average_distance) {
     /* The vector math here recovers the average
     orbital momentum from the softbody angular momentum. */
-    local_position = p5.Vector.sub(this.position, softbody_position);
-    local_angular = local_position.copy().rotate(radians(softbody_angular.z));
+    let local_position = p5.Vector.sub(this.position, softbody_position);
+    let local_angular = local_position.copy().rotate(radians(softbody_angular.z));
     local_angular.sub(local_position);
     local_angular.div(average_distance);
-    total_momentum = p5.Vector.add(softbody_linear, local_angular);
+    let total_momentum = p5.Vector.add(softbody_linear, local_angular);
 
     // Apply spring damping to node momentum, conserving softbody momentum.
     this.momentum.sub(total_momentum);
