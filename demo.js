@@ -82,11 +82,11 @@ function create_square(damping, mass, stiffness, node_count,
     /* Create a vector based on the size of the square,
     move it up or down to generate points on a side of the square,
     and rotate it when generating a different side. */
-    normal = createVector(size / 2, 0);
-    scalar = 4 * i / nodes.length;
-    y = (scalar % 1) * size - size / 2;
-    side = HALF_PI * (int(scalar % 4));
-    p = p5.Vector.add(normal, createVector(0, y)).rotate(side + rotation);
+    let normal = createVector(size / 2, 0);
+    let scalar = 4 * i / nodes.length;
+    let y = (scalar % 1) * size - size / 2;
+    let side = HALF_PI * int(scalar % 4);
+    let p = p5.Vector.add(normal, createVector(0, y)).rotate(side + rotation);
     p.add(position);
 
     // Create and add a node to the softbody nodes array.
