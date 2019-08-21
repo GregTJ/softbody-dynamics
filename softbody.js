@@ -15,7 +15,7 @@ function setup() {
   createCanvas(720, 480);
 
   // The simulation parameters.
-  var gravity = createVector(0, 1); // Gravity vector.
+  var gravity = createVector(0, 1); // Gravity acceleration vector.
   var boundary_friction = 0.6; // Damping of momentum on collision with boundary.
   var collison_damping = 0.7; // Damping of momentum on collision with object.
   var collision_force = 400; // Magnitude of force repeling softbody nodes on collision.
