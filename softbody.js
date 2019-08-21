@@ -1,13 +1,10 @@
 /* Forward Euler spring-mass-damper softbody simulation.
 Conserves local rigid body momentum (linear and angular).
-
 Could be converted to a more advanced 
 Runge-Kutta solver for greater stability.
 (The softbody sim in blender uses the Heun method for example...)
-
 Damping is defined on nodes instead of springs
 because it makes the code a little simpler. 
-
 Uses an approximation of hermite radial basis function interpolation
 to find the interior of the softbodies for collision. */
 
@@ -26,7 +23,7 @@ function setup() {
 
   const count = 4; // Number of softbodies.
   const size = 100; // Size of softbodies.
-  const resolution = 4; // Number of nodes per softbody.
+  let resolution = 4; // Number of nodes per softbody.
 
   resolution = 4 * (resolution + 1)
   let softbodies = new Array(count);
@@ -275,7 +272,7 @@ function softbody(nodes, color) {
     for (let i = 0; i < this.nodes.length; i++) {
       let index = (i + 1) % this.nodes.length
       let position = this.nodes[index].position
-      let curveVertex(position.x, position.y);
+      curveVertex(position.x, position.y);
     }
     endShape(CLOSE);
 
