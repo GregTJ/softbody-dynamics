@@ -188,8 +188,9 @@ function softbody(nodes, color) {
   this.damp_update_boundary = function(friction) {
     for (let i = 0; i < this.nodes.length; i++) {
       current_node = this.nodes[i];
-      current_node.apply_damping(this.angular_momentum, this.linear_momentum,
+      current_node.calculate_global(this.angular_momentum, this.linear_momentum,
         this.position, this.average_distance)
+      current_node.apply_damping();
       current_node.update();
       current_node.boundary_collide(friction);
     }
@@ -208,6 +209,7 @@ function node(position, mass, damping, springs) {
   this.damping = damping;
   this.springs = springs;
   this.momentum = createVector(0, 0);
+  this.global_momentum = createVector(0, 0);
 
   this.integrate_springs = function(nodes) {
     // For every spring of this node;
@@ -246,21 +248,23 @@ function node(position, mass, damping, springs) {
       this.momentum.add(goal_vector);
     }
   }
-
-  this.apply_damping = function(softbody_angular, softbody_linear,
+  
+  this.calculate_global = function(softbody_angular, softbody_linear,
     softbody_position, average_distance) {
-    /* The vector math here recovers the average
+     /* The vector math here recovers the average
     orbital momentum from the softbody angular momentum. */
     let local_position = p5.Vector.sub(this.position, softbody_position);
     let local_angular = local_position.copy().rotate(radians(softbody_angular.z));
     local_angular.sub(local_position);
     local_angular.div(average_distance);
-    let total_momentum = p5.Vector.add(softbody_linear, local_angular);
+    this.global_momentum = p5.Vector.add(softbody_linear, local_angular);
+  }
 
+  this.apply_damping = function() {
     // Apply spring damping to node momentum, conserving softbody momentum.
-    this.momentum.sub(total_momentum);
-    this.momentum.mult(1 - damping);
-    this.momentum.add(total_momentum);
+    this.momentum.sub(this.global_momentum);
+    this.momentum.mult(1 - this.damping);
+    this.momentum.add(this.global_momentum);
   }
 
   this.integrate_external = function(softbody_external) {
@@ -299,14 +303,12 @@ function node(position, mass, damping, springs) {
     scalar = object.volume_field(this.position);
     // Check if node is inside the object.
     if (scalar < 0) {
+      this.momentum.sub(this.global_momentum);
       /* Push node away from softbody, in the direction of the nodes normal,
       as scaled by the distance from the surface of the softbody. */
       this.momentum.sub(p5.Vector.mult(normal, force * -scalar));
-
-      /* There really should be a momentum conversation 
-      step here for the entire system of softbodies,
-      but it is out of scope for this project. */
       this.momentum.mult(1 - damping);
+      this.momentum.add(this.global_momentum);
     }
   }
 }
