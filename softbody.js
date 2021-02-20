@@ -1,5 +1,5 @@
 /* Forward Euler spring-mass-damper softbody simulation.
-Conserves local rigid body momentum (linear and angular).
+Conserves rigid body momentum (linear and angular).
 Could be converted to a more advanced 
 Runge-Kutta solver for greater stability.
 (The softbody sim in blender uses the Heun method for example...)
