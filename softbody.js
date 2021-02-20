@@ -73,12 +73,12 @@ function softbody(nodes, color) {
     for (let i = 0; i < this.nodes.length; i++) {
       let current_node = this.nodes[i]
       this.linear_momentum.add(current_node.momentum);
-      this.position.add(p5.Vector.mult(current_node.position, current_node.mass));
+      this.position.add(current_node.position);
       this.mass += current_node.mass;
     }
     this.linear_momentum.div(this.nodes.length)
     this.mass /= this.nodes.length;
-    this.position.div(this.mass * this.nodes.length);
+    this.position.div(this.nodes.length);
 
     for (let i = 0; i < this.nodes.length; i++) {
       let current_node = this.nodes[i]
